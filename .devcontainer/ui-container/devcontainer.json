@@ -11,19 +11,135 @@
 
 	// Configure tool-specific properties.
 	"customizations": {
-		// Configure properties specific to VS Code.
-		"vscode": {
-			// Set *default* container specific settings.json values on container create.
-			"settings": {
-				
-			},
-
-			// Add the IDs of extensions you want installed when the container is created.
-			"extensions": [
-				
-			]
-		}
-	},
+        "vscode": {
+            "extensions": [
+                "ms-azuretools.vscode-docker",
+                "github.vscode-pull-request-github",
+                "esbenp.prettier-vscode",
+                "dbaeumer.vscode-eslint",
+                "figma.figma-vscode-extension",
+                "zignd.html-css-class-completion",
+                "christian-kohler.npm-intellisense",
+                "christian-kohler.path-intellisense"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "editor.defaultFormatter": "esbenp.prettier-vscode",
+                "editor.formatOnSave": true,
+                "editor.formatOnPaste": true,
+                "editor.codeActionsOnSave": {
+                    "source.fixAll.eslint": "always"
+                },
+                "prettier.requireConfig": true,
+                "prettier.configPath": "./portal/.prettierrc",
+                "[javascript]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                "[typescript]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                "[javascriptreact]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                "[typescriptreact]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                "[json]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                "[html]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                "[css]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                "[scss]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                "[markdown]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                }            
+            },
+            "tasks": {
+                "version": "2.0.0",
+                "tasks": [
+                    {
+                        "label": "merge",
+                        "type": "shell",
+                        "command": "git fetch origin && git checkout ${input:branchName} && git pull origin ${input:branchName} && git merge origin/main --no-ff",
+                        "problemMatcher": [],
+                        "presentation": {
+                            "reveal": "always",
+                            "panel": "new"
+                        }
+                    },
+                    {
+                        "label": "deploy",
+                        "type": "shell",
+                        "command": "npm run build && npm run deploy",
+                        "problemMatcher": []
+                    },
+                    {
+                        "label": "create-feature-branch",
+                        "type": "shell",
+                        "command": "git checkout -b feature/${input:featureName}",
+                        "problemMatcher": []
+                    },
+                    {
+                        "label": "lint-fix",
+                        "type": "shell",
+                        "command": "npm run lint -- --fix",
+                        "problemMatcher": ["$eslint-stylish"]
+                    },
+                    {
+                        "label": "test-watch",
+                        "type": "shell",
+                        "command": "npm run test -- --watch",
+                        "isBackground": true,
+                        "problemMatcher": ["$jest-watch"]
+                    },
+                    {
+                        "label": "docker-rebuild",
+                        "type": "shell",
+                        "command": "docker-compose down && docker-compose build --no-cache && docker-compose up -d",
+                        "problemMatcher": []
+                    },
+                    {
+                        "label": "update-dependencies",
+                        "type": "shell",
+                        "command": "npm update && npm audit fix",
+                        "problemMatcher": []
+                    },
+                    {
+                        "label": "clear-cache",
+                        "type": "shell",
+                        "command": "npm cache clean --force && rm -rf node_modules && npm install",
+                        "problemMatcher": []
+                    },
+                    {
+                        "label": "format-all",
+                        "type": "shell",
+                        "command": "npx prettier --write .",
+                        "problemMatcher": []
+                    }
+                ],
+                "inputs": [
+                    {
+                        "id": "branchName",
+                        "type": "promptString",
+                        "description": "Branch name to merge",
+                        "default": "feature/"
+                    },
+                    {
+                        "id": "featureName",
+                        "type": "promptString",
+                        "description": "Name of the new feature branch",
+                        "default": "my-feature"
+                    }
+                ]
+            }
+        }
+    },
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	 "forwardPorts": [5173],
@@ -34,7 +150,8 @@
 	// }
 
 	// postCreateCommand.sh parameters: $1=SA password, $2=dacpac path, $3=sql script(s) path
-	"postCreateCommand": ""
+	"postCreateCommand": "cd portal && npm install",
+    "remoteUser": "node"
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
