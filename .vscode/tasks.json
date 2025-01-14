@@ -1,60 +1,64 @@
 {
   "version": "2.0.0",
   "tasks": [
-      {
-          "label": "merge",
-          "type": "shell",
-          "command": "git fetch origin && git checkout ${input:branchName} && git pull origin ${input:branchName} && git merge origin/main --no-ff",
-          "problemMatcher": [],
-          "presentation": {
-              "reveal": "always",
-              "panel": "new"
-          }
-      },
-      {
-          "label": "deploy",
-          "type": "shell",
-          "command": "npm run build && npm run deploy",
-          "problemMatcher": []
-      },
-      {
-          "label": "create-feature-branch",
-          "type": "shell",
-          "command": "git checkout -b feature/${input:featureName}",
-          "problemMatcher": []
-      },
-      {
-          "label": "lint-fix",
-          "type": "shell",
-          "command": "npm run lint -- --fix",
-          "problemMatcher": ["$eslint-stylish"]
-      },
-      {
-          "label": "test-watch",
-          "type": "shell",
-          "command": "npm run test -- --watch",
-          "isBackground": true,
-          "problemMatcher": ["$eslint-stylish"]
-      },
-      {
-          "label": "update-dependencies",
-          "type": "shell",
-          "command": "npm update && npm audit fix",
-          "problemMatcher": []
-      },
-      {
-          "label": "clear-cache",
-          "type": "shell",
-          "command": "npm cache clean --force && rm -rf node_modules && npm install",
-          "problemMatcher": []
-      },
-      {
-          "label": "format-all",
-          "type": "shell",
-          "command": "npx prettier --write .",
-          "problemMatcher": []
-      }
-  ],
+    {
+        "label": "merge",
+        "type": "shell",
+        "command": "git fetch origin && git checkout ${input:branchName} && git pull origin ${input:branchName} && git merge origin/main --no-ff",
+        "problemMatcher": [],
+        "presentation": {
+            "reveal": "always",
+            "panel": "new"
+        }
+    },
+    {
+        "label": "deploy",
+        "type": "shell",
+        "command": "npm run build && npm run deploy",
+        "problemMatcher": []
+    },
+    {
+        "label": "create-feature-branch",
+        "type": "shell",
+        "command": "git checkout -b feature/${input:featureName}",
+        "problemMatcher": []
+    },
+    {
+        "label": "lint-fix",
+        "type": "shell",
+        "command": "npm run lint -- --fix",
+        "problemMatcher": [
+            "$eslint-stylish"
+        ]
+    },
+    {
+        "label": "test-watch",
+        "type": "shell",
+        "command": "npm run test -- --watch",
+        "isBackground": true,
+        "problemMatcher": [
+            "$eslint-stylish"
+        ]
+    },
+    {
+        "label": "update-dependencies",
+        "type": "shell",
+        "command": "npm update && npm audit fix",
+        "problemMatcher": []
+    },
+    {
+        "label": "clear-cache",
+        "type": "shell",
+        "command": "npm cache clean --force && rm -rf node_modules && npm install",
+        "problemMatcher": []
+    },
+    {
+        "label": "format-all",
+        "type": "shell",
+        "command": "npx prettier --write .",
+        "problemMatcher": []
+    }
+],
   "inputs": [
       {
           "id": "branchName",

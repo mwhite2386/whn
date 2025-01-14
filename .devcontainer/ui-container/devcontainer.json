@@ -1,16 +1,17 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/dotnet-mssql
 {
-	"name": "UI Development",
-	"dockerComposeFile": ["../../docker-compose.yml"],
-	"service": "ui",
-	"workspaceFolder": "/workspace/ui",
+    "name": "UI Development",
+    "dockerComposeFile": ["../../docker-compose.yml"],
+    "service": "ui",
+    "workspaceFolder": "/workspace/ui",
 
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
+    // Features to add to the dev container
+    "features": {
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
 
-	// Configure tool-specific properties.
-	"customizations": {
+    // Configure tool-specific properties
+    "customizations": {
         "vscode": {
             "extensions": [
                 "ms-azuretools.vscode-docker",
@@ -63,18 +64,22 @@
         }
     },
 
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	 "forwardPorts": [5173],
-	// "portsAttributes": {
-	//		"5001": {
-	//			"protocol": "https"
-	//		}
-	// }
+    // Forward Vite dev server port
+    "forwardPorts": [5173],
+    "portsAttributes": {
+        "5173": {
+            "protocol": "http",
+            "label": "Vite Dev Server"
+        }
+    },
 
-	// postCreateCommand.sh parameters: $1=SA password, $2=dacpac path, $3=sql script(s) path
-	"postCreateCommand": "cd portal && npm install",
+    // Mount the .vscode folder into the container
+    "mounts": [
+        "source=${localWorkspaceFolder}/.vscode,target=/workspace/ui/.vscode,type=bind,consistency=cached"
+    ],
+
+    // Combined postCreateCommand to install dependencies and set up tasks
+    "postCreateCommand": "bash -c 'cd portal && npm install && mkdir -p /workspace/ui/.vscode && cp -n /workspace/ui/.vscode/tasks.json /workspace/ui/.vscode/ 2>/dev/null || true'",
+    
     "remoteUser": "node"
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
 }
